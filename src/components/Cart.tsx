@@ -2,20 +2,17 @@ import { useEffect, useState } from "react";
 import { ADD_TO_CART_TOPIC } from "../topics";
 import { NumberOfProductsAdded } from "./NumberOfProductsAdded";
 
-interface ProductAddEvent extends Event {
-  detail: {
+interface ProductAddEvent extends Partial<Event> {
+  detail?: {
     count: number;
   };
-}
-interface ProductAddEventListener extends EventListener<ProductAddEvent> {
-  (event: ProductAddEvent): void;
 }
 export const Cart = () => {
   const [productsInCartCount, setProductsInCartCount] = useState(0);
 
   useEffect(() => {
-    const listener: ProductAddEventListener = (event: ProductAddEvent) => {
-      setProductsInCartCount(event.detail.count);
+    const listener: EventListener = (event: ProductAddEvent) => {
+      setProductsInCartCount(event.detail?.count as number);
     };
 
     window.addEventListener(ADD_TO_CART_TOPIC, listener);
